@@ -1,58 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import PageContainer from "@/components/page-container";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useAuthStore } from "@/stores";
+import { Pen } from "lucide-react";
 
-export default function DashboardPage() {
-  const router = useRouter();
-  const [ready, setReady] = useState(false);
-  const [email, setEmail] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      const session = data.session;
-
-      if (!session) {
-        router.replace("/signin");
-        return;
-      }
-      setEmail(session.user.email ?? null);
-      setReady(true);
-    };
-    checkSession();
-  }, [router]);
-
-  if (!ready) {
-    return (
-      <div className="min-h-dvh grid place-items-center">
-        <div className="text-sm text-muted-foreground">Carregando...</div>
-      </div>
-    );
-  }
+export default function Page() {
+  const { user } = useAuthStore();
 
   return (
-    <div className="min-h-dvh">
-      <header className="border-b border-white/10 bg-white/5">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-          <div className="text-sm text-white/80">Dashboard</div>
-          <button
-            className="text-xs text-white/70 hover:text-white"
-            onClick={async () => {
-              await supabase.auth.signOut();
-              router.push("/signin");
-            }}
-          >
-            Sair
-          </button>
+    <PageContainer title="Painel" className="p-4">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">Gerencie sua empresa</h2>
+          <p className="text-gray-500 text-sm">Controle e gerencie o site da sua empresa</p>
         </div>
-      </header>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" asChild></Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button size="sm" variant="outline" className="cursor-pointer">
+                Renomear empresa
+                <Pen className="w-4 h-4 ml-2" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Renomeando empresa</DialogTitle>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-xl font-semibold tracking-tight text-white">Bem-vindo{email ? `, ${email}` : ""}</h1>
-        <p className="mt-2 text-sm text-neutral-300">Este é um dashboard protegido. Personalize conforme necessário.</p>
-      </main>
-    </div>
+      <div>infos</div>
+    </PageContainer>
   );
 }
