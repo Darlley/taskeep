@@ -38,29 +38,4 @@ export const companyMenuItems = () => [
         url: `/dashboard/projects`,
         icon: Kanban,
     },
-    {
-        title: "Criar convite",
-        url: `/dashboard/invites`,
-        icon: Inbox,
-    },
-    {
-        title: "Gerenciar Endereços",
-        url: `/dashboard/enderecos`,
-        icon: MapPin,
-    },
-    {
-        title: "Tarefas",
-        url: `/dashboard/tarefas`,
-        icon: CalendarDays,
-    },
-    {
-        title: "Pagamentos",
-        url: `/dashboard/pagamentos`,
-        icon: HandCoins,
-    },
-    {
-        title: "Website",
-        url: `/dashboard/website`,
-        icon: Globe,
-    },
 ];

@@ -95,11 +95,6 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Dicas de atalhos visíveis no dashboard */}
-      <div className="mb-3 text-xs text-gray-500">
-        Atalhos: Alt+arrastar ou botão do meio para pan • Duplo clique cria nota • Shift+arrastar para seleção múltipla
-      </div>
-
       {view === "projects" ? (
         <ProjectsView teamId={user.teamId} />
       ) : (

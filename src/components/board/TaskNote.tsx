@@ -13,6 +13,7 @@ type TaskNoteProps = {
   content?: string | null;
   selected?: boolean;
   onClick?: (id: string, e: React.MouseEvent) => void;
+  onDoubleClick?: (id: string, e: React.MouseEvent) => void;
   onDragDelta?: (id: string, dx: number, dy: number) => void;
   onDragEnd?: (id: string) => void;
 };
@@ -28,18 +29,22 @@ export function TaskNote({
   content,
   selected = false,
   onClick,
+  onDoubleClick,
   onDragDelta,
   onDragEnd,
 }: TaskNoteProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
   const [start, setStart] = useState<{ x: number; y: number } | null>(null);
+  const [hasDragged, setHasDragged] = useState(false);
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.shiftKey) return; // permite iniciar seleção em nível superior
+    // Permite iniciar seleção em nível superior e pan com Alt/botão do meio
+    if (e.shiftKey || e.altKey || e.button === 1) return;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
     setDragging(true);
     setStart({ x: e.clientX, y: e.clientY });
+    setHasDragged(false);
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -47,6 +52,8 @@ export function TaskNote({
     const dx = e.clientX - start.x;
     const dy = e.clientY - start.y;
     setStart({ x: e.clientX, y: e.clientY });
+    // Marca que houve movimento para diferenciar de um clique simples
+    if (Math.abs(dx) + Math.abs(dy) > 2) setHasDragged(true);
     onDragDelta?.(id, dx, dy);
   };
 
@@ -64,7 +71,16 @@ export function TaskNote({
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      onClick={(e) => onClick?.(id, e)}
+      onClick={(e) => {
+        // Se houve arraste, suprime o clique para não togglar seleção
+        if (hasDragged) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        onClick?.(id, e);
+      }}
+      onDoubleClick={(e) => onDoubleClick?.(id, e)}
       className="absolute rounded-md shadow-sm cursor-move select-none"
       style={{ left: x, top: y, width: width ?? 200, height: height ?? 150, background: color ?? "#fef3c7", border }}
     >
