@@ -5,13 +5,15 @@ import { Button } from "@/components/ui/button";
 import { ProjectsView } from "@/components/board/ProjectsView";
 import { TeamsView } from "@/components/board/TeamsView";
 import { useAuthStore } from "@/stores";
-import { LayoutGrid, Kanban, Plus } from "lucide-react";
+import { LayoutGrid, Kanban, Plus, LogOut } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { fetchProjects, createProject, fetchTeams, type Project, type Team } from "@/lib/boards";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const { user } = useAuthStore();
@@ -22,6 +24,12 @@ export default function Page() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [createForm, setCreateForm] = useState<{ team_id: string; name: string; description: string; color: string }>({ team_id: "", name: "", description: "", color: "#6366f1" });
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.push("/signin");
+  }
 
   useEffect(() => {
     if (!user) return;
@@ -63,19 +71,19 @@ export default function Page() {
   };
 
   return (
-    <PageContainer title="Painel" className="p-4 overflow-x-hidden">
-      <div className="flex items-center justify-between mb-4">
+    <PageContainer title="Painel" className="p-4 overflow-x-hidden w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 w-full">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-1">Dashboard Interativo</h2>
           <p className="text-gray-500 text-sm">Alterne entre visualizações de projetos e teams. Duplo clique cria notas.</p>
         </div>
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto min-w-0 justify-start sm:justify-end">
           <Link href="/dashboard/projects" className="inline-flex items-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10">Gerenciar Projects</Link>
           <Link href="/dashboard/teams" className="inline-flex items-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 hover:bg-white/10">Gerenciar Teams</Link>
-          <div className="ml-2 min-w-0">
+          <div className="min-w-0 w-full sm:w-auto sm:ml-2">
             <label className="sr-only">Projetos</label>
             <select
-              className="w-full sm:w-56 rounded-md bg-white text-neutral-900 border border-neutral-300 px-3 py-2 text-sm"
+              className="w-full sm:w-56 min-w-0 rounded-md bg-white text-neutral-900 border border-neutral-300 px-3 py-2 text-sm"
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
             >
@@ -84,9 +92,6 @@ export default function Page() {
               ))}
             </select>
           </div>
-          <Button onClick={() => setCreatingOpen(true)}>
-            <Plus className="w-4 h-4 mr-2" /> Novo Projeto
-          </Button>
         </div>
       </div>
 
