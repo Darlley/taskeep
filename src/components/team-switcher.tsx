@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { ChevronDown, Plus, Building } from "lucide-react";
-import { useCompanyStore } from "@/stores/company-store";
+import { fetchTeams, type Team } from "@/lib/boards";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,31 +16,38 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { useEffect, use } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores";
 
 export function TeamSwitcher() {
-
-  const { user } = useAuthStore()
-  const { companies, currentCompany, setCurrentCompany, fetchCompanies } = useCompanyStore();
+  const { user } = useAuthStore();
+  const [teams, setTeams] = React.useState<Team[]>([]);
+  const [currentTeam, setCurrentTeam] = React.useState<Team | null>(null);
 
   useEffect(() => {
-    if (user?.teamId) {
-      fetchCompanies(user?.teamId);
-    }
+    if (!user) return;
+    (async () => {
+      try {
+        const list = await fetchTeams();
+        setTeams(list);
+        // Seleciona o primeiro time como padrão se não houver seleção
+        setCurrentTeam((prev) => prev ?? list[0] ?? null);
+      } catch (e) {
+        // Fallback e erros já tratados em fetchTeams
+      }
+    })();
   }, [user]);
 
-  const handleTeamChange = (team: any) => {
-    setCurrentCompany(team);
+  const handleTeamChange = (team: Team) => {
+    setCurrentTeam(team);
   };
 
-  if (!currentCompany) {
+  if (!currentTeam) {
     return null;
   }
 
-  if (companies.length <= 1) {
+  if (teams.length <= 1) {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
@@ -48,7 +55,7 @@ export function TeamSwitcher() {
             <div className="bg-sidebar-primary data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground text-sidebar-primary-foreground flex aspect-square size-6 items-center justify-center rounded-md">
               <Building className="size-4" />
             </div>
-            <span className="truncate font-medium">{currentCompany.name}</span>
+            <span className="truncate font-medium">{currentTeam.name}</span>
           </div>
         </SidebarMenuItem>
       </SidebarMenu>
@@ -64,7 +71,7 @@ export function TeamSwitcher() {
               <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-6 items-center justify-center rounded-md">
                 <Building className="size-4" />
               </div>
-              <span className="truncate font-medium">{currentCompany.name}</span>
+              <span className="truncate font-medium">{currentTeam.name}</span>
               <ChevronDown className="ml-auto opacity-50" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
@@ -75,9 +82,9 @@ export function TeamSwitcher() {
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Empresas
+              Times
             </DropdownMenuLabel>
-            {companies.map((team) => (
+            {teams.map((team) => (
               <DropdownMenuItem
                 key={team.name}
                 onClick={() => handleTeamChange(team)}
@@ -92,13 +99,13 @@ export function TeamSwitcher() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="gap-2 p-2"
-              onClick={() => toast.success('Adicionar empresa')}
+              onClick={() => toast.success('Adicionar time')}
             >
               <div className="bg-background flex size-6 items-center justify-center rounded-md border">
                 <Plus className="size-4" />
               </div>
               <div className="text-muted-foreground font-medium">
-                Adicionar empresa
+                Adicionar time
               </div>
             </DropdownMenuItem>
           </DropdownMenuContent>

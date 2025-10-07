@@ -20,7 +20,7 @@ export function AuthLayout({ title, subtitle, children, className }: AuthLayoutP
         <div className="relative h-full flex flex-col justify-center p-12 text-white">
           <div className="space-y-6">
             <div className="space-y-4">
-              <h2 className="text-4xl font-bold">Giroflex</h2>
+              <h2 className="text-4xl font-bold">taskeep</h2>
               <p className="text-xl text-blue-100">
                 Monitoramento tático, rondas, escoltas e vigilância patrimonial
               </p>
@@ -61,7 +61,7 @@ export function AuthLayout({ title, subtitle, children, className }: AuthLayoutP
           {/* Logo/Marca no rodapé */}
           <div className="absolute bottom-12 left-12 right-12">
             <div className="flex items-center justify-between text-blue-200 text-sm">
-              <span>© 2024 Giroflex</span>
+              <span>© 2024 taskeep</span>
               <span>Segurança Profissional</span>
             </div>
           </div>

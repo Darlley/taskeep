@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Giroflex",
+  title: "taskeep",
   description: "Monitoramento tático • Rondas • Escoltas • Vigilância Patrimonial",
 };
 

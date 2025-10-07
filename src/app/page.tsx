@@ -109,7 +109,7 @@ export default function HomePage() {
             <div className="h-7 w-7 rounded-sm bg-white text-neutral-900 grid place-items-center ring-1 ring-white/10 shadow-sm group-hover:ring-white/20 transition">
               <span className="text-[12px] font-semibold tracking-tight">OS</span>
             </div>
-            <span className="text-sm sm:text-base font-medium tracking-tight text-white/90">GIROFLEX</span>
+            <span className="text-sm sm:text-base font-medium tracking-tight text-white/90">taskeep</span>
           </Link>
           <nav className="hidden md:flex items-center gap-7 text-sm text-neutral-300">
             <Link href="#solucoes" className="hover:text-white transition-colors">Soluções</Link>
@@ -606,7 +606,7 @@ export default function HomePage() {
                     <Mail className="w-5 h-5 text-white/80" strokeWidth={1.5} />
                     <div>
                       <div className="text-sm text-white/80">E-mail</div>
-                      <a href="mailto:contato@giroflex.com" className="text-sm font-medium text-white hover:underline">contato@giroflex.com</a>
+                      <a href="mailto:contato@taskeep.com" className="text-sm font-medium text-white hover:underline">contato@taskeep.com</a>
                     </div>
                   </div>
                   <div className="pt-2">
@@ -641,7 +641,7 @@ export default function HomePage() {
                 <span className="text-[12px] font-semibold tracking-tight">OS</span>
               </div>
               <div>
-                <div className="text-sm font-medium tracking-tight text-white/90">GIROFLEX</div>
+                <div className="text-sm font-medium tracking-tight text-white/90">taskeep</div>
                 <div className="text-xs text-white/50">Seriedade + tecnologia para o seu bairro.</div>
               </div>
             </div>
@@ -651,7 +651,7 @@ export default function HomePage() {
               <Link href="#contato" className="hover:text-white transition-colors">Contato</Link>
             </div>
           </div>
-          <div className="mt-6 text-xs text-white/40">© <span id="year"></span> GIROFLEX. Todos os direitos reservados.</div>
+          <div className="mt-6 text-xs text-white/40">© <span id="year"></span> taskeep. Todos os direitos reservados.</div>
         </div>
       </footer>
     </div>

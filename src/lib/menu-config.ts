@@ -5,7 +5,8 @@ import {
     Home,
     Inbox,
     MapPin,
-    Users
+    Users,
+    Kanban
 } from "lucide-react"
 
 export const adminMenuItems = [
@@ -26,6 +27,16 @@ export const companyMenuItems = () => [
         title: "Dashboard",
         url: `/dashboard`,
         icon: Home,
+    },
+    {
+        title: "Teams",
+        url: `/dashboard/teams`,
+        icon: Users,
+    },
+    {
+        title: "Projects",
+        url: `/dashboard/projects`,
+        icon: Kanban,
     },
     {
         title: "Criar convite",

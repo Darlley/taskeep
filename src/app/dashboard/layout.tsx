@@ -17,7 +17,7 @@ export default function Layout({
     <SidebarProvider>
         <SidebarLeft menuItems={menuItems} />
         <SidebarInset>
-            <div className="h-dvh flex flex-col overflow-y-auto">
+            <div className="h-dvh w-full flex flex-col overflow-y-auto overflow-x-hidden">
             {children}
             </div>
         </SidebarInset>
